@@ -1,0 +1,1 @@
+'Ghost', 'Fire', 'Water', 'Fire', 'Fairy', 'Ghost', 'Ghost', 'Ghost'
