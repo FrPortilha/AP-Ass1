@@ -38,6 +38,10 @@ public class Assignment1 {
             inputFile.close();
             break;
             case 5:
+            inputFile = new Scanner(new File(inputFileName));
+            String word5 = inputFile.nextLine ();
+            question5(word5);
+            inputFile.close();
             break;
             default:
             System.out.println("Invalid question number!");
@@ -88,7 +92,7 @@ public class Assignment1 {
         String[] vowels = {"a","e","i","o","u"};
         int totalCount = 0;
         for(String vowel : vowels){
-            totalCount += countVowelIn(vowel,input);
+            totalCount += countVowelIn(vowel,input.toLowerCase());
         }
         System.out.println(totalCount);
     }
@@ -201,7 +205,7 @@ public class Assignment1 {
      */
     private static int countVowelIn(String vowel,String input){
         if(input.contains(vowel)){
-            return 1 + countVowelIn(vowel, input.substring(input.indexOf(vowel)));
+            return 1 + countVowelIn(vowel, input.substring(input.indexOf(vowel) + 1));
         }
         else{
             return 0;
