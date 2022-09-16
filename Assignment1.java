@@ -33,8 +33,8 @@ public class Assignment1 {
             break;
             case 4:
             inputFile = new Scanner(new File(inputFileName));
-            //String word4 = inputFile.nextLine ();
-           // question4(word4);
+            String word4 = inputFile.nextLine ();
+            question4(word4);
             inputFile.close();
             break;
             case 5:
@@ -82,11 +82,11 @@ public class Assignment1 {
      * This method computes question 4 and prints the result 
      * @param input string from text file
      */
-    //public static void question4(String input){
-    //    String[] numbers = input.split("[,]",0);
-    //    String words = doWords(numbers, numbers.length-1);
-    //    System.out.println(words);
-    //}
+    public static void question4(String input){
+        String[] numbers = input.split("[,]",0);
+        List<String> words = getWords(numbers);
+        System.out.println(words.toString());
+    }
 
     public static void question5(String input){
         String[] vowels = {"a","e","i","o","u"};
@@ -160,42 +160,55 @@ public class Assignment1 {
         return number + doCheops(number - 1);
     }
 
-    //private static String[] doWords(String[] numbers, int index){
-    //    int[] choices = options(numbers);
-    //    int totalComb = multiply(choices);
-    //    String computeWords
-    //    String[] word
-    //    return word + "," + doWords(numbers, index + 1); 
-    //    
-    //}
+    private static List<String> getWords(String[] numbers){
+        int[] choices = options(numbers);
+        int[] initComb = initComb(numbers,choices);
+        List<int[]> wordList = new ArrayList<>();
+        doWords(wordList, choices, 0, 0, initComb, new int[numbers.length]);
+        List<String> words = new ArrayList<>();
+        for(int i = 0; i < wordList.size() ; i++){
+            String word = "";
+            for(int j = 0; j < numbers.length; j++){
+                word = word + (char)(96 + wordList.get(i)[j]);
+            }
+            words.add(word);
+        }
+        return words;
+    }
+    
+    private static void doWords(List<int[]> wordList, int[] choices, int index , int n, int[] initComb, int[] comb){
+        
+        if(index == comb.length){
+            int[] c = comb.clone();
+            wordList.add(c);
+        }
+        else if(n < choices[index]){
+            comb[index] = initComb[index] + n ;
+            doWords(wordList, choices, index + 1,0 , initComb, comb);
+            doWords(wordList, choices, index , n+1, initComb, comb);
+        }
+    }
+    private static int[] initComb(String[] numbers , int[] choices){
+        int[] initComb = new int[numbers.length];
+        int[] key = new int[]{0, 0, 1, 4, 7, 10, 13, 16, 20, 23};
+        for(int i=0;i<numbers.length;i++){
+            initComb[i] = key[Integer.parseInt(numbers[i])];
+        }
+        return initComb;
+    }
     /**
      * This method computes how many letters each number corresponds to and returns it in an array
      * @param numbers of the phonne number to be checked
      * @return an array with the number of letters each number corresponds to
      */
-    //private static int[] options(String[] numbers){
-    //    int[] choices = new int[numbers.length];
-    //    for(int i = 0; i < numbers.length; i++) {
-    //        if(numbers[i].equals(7)||numbers[i].equals(9)){
-    //            choices[i] = 4;
-    //        }
-    //        else{ choices[i] = 3;}
-    //        System.out.print(choices[i]);
-    //    }
-    //    return choices;
-    //}
-    ///**
-    // * This method multiplies all elementes of an array 
-    // * @param choices the array to be mutiplied
-    // * @return the result of the multiplication
-    // */
-    //private static int multiply(int[] choices){
-    //    int result = 1;
-    //    for(int choice :choices){
-    //        result *= choice;
-    //    }
-    //    return result;
-    //}
+    private static int[] options(String[] numbers){
+        int[] choices = new int[numbers.length];
+        int[] key = new int[]{0, 0, 3, 3, 3, 3, 3, 4, 3, 4};
+        for(int i=0;i<numbers.length;i++){
+            choices[i] = key[Integer.parseInt(numbers[i])];
+        }
+        return choices;
+    }
     /**
      * This method counts the number of occurences of a specific character in a string
      * This is solved by recursion
@@ -207,8 +220,6 @@ public class Assignment1 {
         if(input.contains(vowel)){
             return 1 + countVowelIn(vowel, input.substring(input.indexOf(vowel) + 1));
         }
-        else{
-            return 0;
-        }
+        else return 0;
     }
 }
