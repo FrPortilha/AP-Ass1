@@ -119,7 +119,6 @@ public class Assignment1 {
             for (int j = 0; j < r; j++) {
                 citiesComb = citiesComb + values[2 + combList.get(i)[j]];
             }
-            //System.out.println("cities : "+citiesComb);
             permutations(citiesComb, "");
             combString += citiesComb + ",";
         }
@@ -162,7 +161,7 @@ public class Assignment1 {
     // }
      private static void permutations(String comb, String iter){
         if(comb.length()==0){
-            System.out.println(iter+",");
+            System.out.print(iter+",");
             return;
         }
         for(int i = 0; i< comb.length(); i++){
@@ -171,6 +170,7 @@ public class Assignment1 {
             permutations(next, iter + c);
         }
      }
+
     /** 
      * This method counts how many strings in an array are equal to the first
      * This is solved by recursion
@@ -203,20 +203,24 @@ public class Assignment1 {
     }
 
     private static String getWords(String input) {
+        //String clean = clean(input);
         String[] numbers = input.split("[,]", 0);
         int nul = countVowelIn("1", input) + countVowelIn("0", input);
         int[] choices = options(numbers, nul);
         int[] initComb = initComb(numbers, nul);
-        System.out.println("Initial comb : " + Arrays.toString(initComb) + " choices : " + Arrays.toString(choices));
+        //System.out.println("Initial comb : " + Arrays.toString(initComb) + " choices : " + Arrays.toString(choices));
         List<int[]> wordList = new ArrayList<>();
         doWords(wordList, choices, 0, 0, initComb, new int[initComb.length]);
         String words = "";
         for (int i = 0; i < wordList.size(); i++) {
             String word = "";
-            for (int j = 0; j < numbers.length; j++) {
+            for (int j = 0; j < choices.length; j++) {
                 word = word + (char) (96 + wordList.get(i)[j]);
             }
-            words += word + ",";
+            words += word;
+            if(i<wordList.size()-1){
+                words += ",";
+            }
         }
         return words;
     }
@@ -232,14 +236,24 @@ public class Assignment1 {
             doWords(wordList, choices, index, n + 1, initComb, comb);
         }
     }
-
+    //private static String clean(String input){
+    //    String[] unwanted = {"0","1"};
+    //    for (String s : unwanted) {
+    //        while(input.contains(s)){
+    //            input = input.substring(0, input.indexOf(s)) + input.substring(input.indexOf(s)+1);
+    //        }
+    //    }
+    //    return input;
+    //}
     private static int[] initComb(String[] numbers, int nul) {
         int[] initComb = new int[numbers.length - nul];
         int[] key = new int[] { 0, 0, 1, 4, 7, 10, 13, 16, 20, 23 };
-        for (int i = 0; i < initComb.length; i++) {
+        int index = 0;
+        for (int i = 0; i < numbers.length; i++) {
             int n = Integer.parseInt(numbers[i]);
             if (n != 0 && n != 1) {
-                initComb[i] = key[n];
+                initComb[index] = key[n];
+                index++;
             }
         }
         return initComb;
@@ -255,10 +269,12 @@ public class Assignment1 {
     private static int[] options(String[] numbers, int nul) {
         int[] choices = new int[numbers.length - nul];
         int[] key = new int[] { 0, 0, 3, 3, 3, 3, 3, 4, 3, 4 };
-        for (int i = 0; i < choices.length; i++) {
+        int index = 0;
+        for (int i = 0; i < numbers.length; i++) {
             int n = Integer.parseInt(numbers[i]);
             if (n != 0 && n != 1) {
-                choices[i] = key[n];
+                choices[index] = key[n];
+                index++;
             }
         }
         return choices;
